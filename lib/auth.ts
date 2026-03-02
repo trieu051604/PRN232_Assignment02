@@ -2,7 +2,10 @@ import { SignJWT, jwtVerify } from "jose";
 import { cookies } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
 
-const secretKey = "secret"; // In production, use process.env.JWT_SECRET
+const secretKey = process.env.JWT_SECRET || "secret";
+if (!process.env.JWT_SECRET) {
+    console.warn("[Auth] WARNING: JWT_SECRET env var is not set. Using insecure default key.");
+}
 const key = new TextEncoder().encode(secretKey);
 
 export async function encrypt(payload: any) {
